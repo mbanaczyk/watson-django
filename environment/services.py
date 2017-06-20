@@ -69,7 +69,11 @@ def query_environ(query_text,environ_id_string, collect_ids):
                 sub_result['Google_Contact']['contact_name'] = gc.contact_name
                 sub_result['Google_Contact']['contact_email'] = gc.contact_email
                 sub_result['Google_Contact']['contact_phone_no'] = gc.contact_phone_no
-            
+                
+                sub_result['google_contact_html'] = "<b>Contributor:</b> " + gc.contact_name + "<br>" +  "<b>Email:</b> " + gc.contact_email + "<br>" + "<b>Phone #:</b> " + gc.contact_phone_no
+            else:
+                sub_result['google_contact_html'] = ""
+                
             #write html content to db
             doc_id = sub_result.get("id")
             json_field_html = sub_result.get("html").replace('<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\'?>', '')

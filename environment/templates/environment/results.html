@@ -23,16 +23,18 @@
                 {% for result in results %}
                     <div id="border">
                         <div class="resultrow">
-                            Source: {{ result.CollectionName }}
+                            <b>Source:</b> {{ result.CollectionName }}
                             <br>
                             <br>
                             {{ result.text }}
                         </div>
                         <div class="resultrow">
                             <br>
-                            Relevancy Score: {{ result.score }}
+                            <b>Relevancy Score:</b> {{ result.score }}
                             <br>
                             <a href = "{% url 'environment:document_detail' environment_id=environ_id document_id=result.document_id %}">View Full Content</a>
+                            <br>
+                            {% autoescape off %}{{ result.google_contact_html }}{% endautoescape %}     
                         </div>
                     </div>
                     <br>
