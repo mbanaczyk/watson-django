@@ -27,14 +27,11 @@ def query_environ(query_text,environ_id_string, collect_ids):
         password=WATSON_PW,
         version="2016-12-01"
     )
+    
     results = []
     unordered_results = []
     for collection in collect_ids:
-<<<<<<< HEAD
         qopts = {'query': query_text, 'return': 'id,score,text,html,extracted_metadata.filename, enriched_text.language'}
-=======
-        qopts = {'query': query_text, 'return': 'id,score,text,html,enriched_text.language,extracted_metadata.filename', 'count':20}
->>>>>>> fc7f7a96dd1ff1a1f0e68597f7337cac2e69b669
         my_query = discovery.query(environ_id_string, collection, qopts)
         sub_results = my_query.get("results", [])
         

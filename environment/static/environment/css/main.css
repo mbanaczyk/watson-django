@@ -150,11 +150,20 @@ h3{
     width: 100%;
 }
 
-#id_queryText{
+#id_queryText {
+    
     width:400px;
     
 }
 
 #resultsheading {
      margin-left: 100px;   
+}
+
+#QuerySearch {
+    text-align: center;
+}
+
+#id_queryText {
+     display: block;   
 }
