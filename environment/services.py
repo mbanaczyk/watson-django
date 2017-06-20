@@ -28,6 +28,7 @@ def query_environ(query_text,environ_id_string, collect_ids):
         version="2016-12-01"
     )
     results = []
+    unordered_results = []
     for collection in collect_ids:
         qopts = {'query': query_text, 'return': 'id,score,text,html,extracted_metadata.filename'}
         my_query = discovery.query(environ_id_string, collection, qopts)
@@ -78,23 +79,33 @@ def query_environ(query_text,environ_id_string, collect_ids):
             doc_id = sub_result.get("id")
             json_field_html = sub_result.get("html").replace('<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\'?>', '')
 
-            print "Document ID = ", doc_id
-            
             try:
                 doc = Document.objects.get(documentIDString=doc_id)
                 doc.documentName = json_field_filename
                 doc.documentContent = json_field_html
             except Document.DoesNotExist:
-                print "Dcument ID doesnt exist ", doc_id
                 doc = Document(documentName=json_field_filename, documentIDString=doc_id, collection=collectionObj, documentContent=json_field_html)
                 doc.save()
             
             
             sub_result['document_id'] = doc.id
             
-            print "DB DOC ID = ", doc.id
-
-            results.append(sub_result)
+            unordered_results.append(sub_result)
+            
+    #put all results in relevance order
+    while (len(unordered_results) > 0):
+        relevancy_high_score = 0
+        high_index = 0
+        for index, raw_result in enumerate(unordered_results):
+            relevancy = raw_result['score']
+        
+            if relevancy > relevancy_high_score:
+                high_index = index
+                relevancy_high_score = relevancy
+        
+        results.append(unordered_results[high_index])
+        unordered_results.pop(high_index)
+    
     return results
     
 def get_contacts():
