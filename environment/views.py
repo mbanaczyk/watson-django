@@ -60,8 +60,7 @@ def results(request, environment_id):
     
     query_text = request.session["queryText"]
     collections = request.session["collections"]
-    isRefreshAction = False
-    
+
     if query_text == None:
         form = QueryForm(request.POST)
         if form.is_valid():
@@ -72,7 +71,6 @@ def results(request, environment_id):
         request.session["collections"] = collections
         form = ResultsForm(request.POST)
     else:
-        isRefreshAction = True
         form = ResultsForm(request.POST)
         if form.is_valid():
             request.session["queryText"] = form.cleaned_data['queryText']
@@ -94,12 +92,9 @@ def results(request, environment_id):
         if json_field_language not in languages:
             languages.append(json_field_language)
             
-    # if filter action thenn apply the filer condition
-    if(isRefreshAction):
-        results = services.applyFiltersToResults(request, environment_id, 'All', .8)
-    else:
-        results = services.query_environ(query_text,environ.environmentIDString,collections) 
-        
+    # apply the filter condition
+    results = services.applyFiltersToResults(request, results)
+
     return render(request, 'environment/results.html', {'results':results,'form':form, 'environ_id':environment_id, 'collectionObjs' : collectionObjs, 'languages' : languages})
     
 

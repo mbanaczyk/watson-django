@@ -22,21 +22,21 @@
                 <h3>Source:<a href="mailto:"></a></h3>
                 
                 {%for collection in collectionObjs%}
-                    <input type="checkbox" name="collection" value="collection.collectionIDString">
+                    <input type="checkbox" name="collectionCB" id="collection{{ forloop.counter }}" value="{{ collection.collectionIDString }}">
                     
                     
                     <h5>{{collection.collectionName}}</h5>
                     <br>
                 {%endfor%}
-                <input type="checkbox" name="collection" value="All"> 
+                <input type="checkbox" name="collectionCB" value="All"> 
                 <h5>All</h5>
                 
                 <br>
                 <h3>Relevance:</h3>
-                <input type="checkbox" name="Relevance" value="RelevanceGreater">
+                <input type="checkbox" name="relevanceCB" value="RelevanceGreater">
                 <h5>>1.0</h5>
                 <br>
-                <input type="checkbox" name="Relevance" value="RelevanceLess"> 
+                <input type="checkbox" name="relevanceCB" value="All"> 
                 <h5>All</h5>
                 <br>
                 <h5>From Date:</h5>
@@ -47,7 +47,7 @@
                 <br>
                 
                 {%for language in languages%}
-                    <input type="checkbox" name="language" value="language">
+                    <input type="checkbox" name="languageCB" id="language{{ forloop.counter }}" value="{{ language }}">
                     
                     
                     <h5>{{language}}</h5>
