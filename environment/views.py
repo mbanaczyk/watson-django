@@ -87,6 +87,7 @@ def results(request, environment_id):
         c = Collection.objects.get(collectionIDString=collection)
         collectionObjs.append(c)
         
+        
     languages = []
     for result in results:
         json_field_language = result['enriched_text'].get('language')
