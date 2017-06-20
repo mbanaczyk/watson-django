@@ -80,8 +80,21 @@ def results(request, environment_id):
     environ = Environment.objects.get(pk=environment_id)
     results = services.query_environ(query_text,environ.environmentIDString,collections)
 
+    collectionObjs = []
+    for collection in collections:
+        c = Collection.objects.get(collectionIDString=collection)
+        collectionObjs.append(c)
+        
+        
+    languages = []
+    for result in results:
+        json_field_language = result['enriched_text'].get('language')
+        if json_field_language not in languages:
+            languages.append(json_field_language)
             
-    return render(request, 'environment/results.html', {'results':results,'form':form, 'environ_id':environment_id})
+    return render(request, 'environment/results.html', {'results':results,'form':form, 'environ_id':environment_id, 'collectionObjs' : collectionObjs, 'languages':languages}) 
+            
+    #return render(request, 'environment/results.html', {'results':results,'form':form, 'environ_id':environment_id, 'collections':collections})
     
 
 def index(request):

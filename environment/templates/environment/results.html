@@ -4,21 +4,69 @@
     <head>
         <link rel="stylesheet" href="{% static 'environment/css/main.css' %}" type="text/css"/>
         <title>Results Page</title>
+        <meta charset="utf-i"/>
     </head>
     <body>
-        <header>
-            <form action="results" method="post">
-                {% csrf_token %}
-                {{ form }}
-                <input type="submit" value="Refresh" />
+        <img id="LogoAL" src="{% static 'images/AL.png' %}" alt="AirLiquide Logo">
+        <img id="LogoCapco" src="{% static 'images/CAPCO.png' %}" alt="Capco Logo">
+        <br>
+        <a href = "{% url 'environment:query' environ_id %}">Back To Query</a>
+        <br>
+        <header id="ResultSearch">
+        <form id="form" action="results" method="post">
+            {% csrf_token %}
+            {{ form }}
+            </header>
+        <nav id="filter">
+            <h2 id="FilterText">Filter</h2>
+                <h3>Source:<a href="mailto:"></a></h3>
+                
+                {%for collection in collectionObjs%}
+                    <input type="checkbox" name="collection" value="collection.collectionIDString">
+                    
+                    
+                    <h5>{{collection.collectionName}}</h5>
+                    <br>
+                {%endfor%}
+                <input type="checkbox" name="collection" value="All"> 
+                <h5>All</h5>
+                
+                <br>
+                <h3>Relevance:</h3>
+                <input type="checkbox" name="Relevance" value="RelevanceGreater">
+                <h5>>1.0</h5>
+                <br>
+                <input type="checkbox" name="Relevance" value="RelevanceLess"> 
+                <h5>All</h5>
+                <br>
+                <h5>From Date:</h5>
+                <input class="datebox" type="date" name="From">
+                <h5>To Date:</h5>
+                <input class="datebox" type="date" name="To">
+                <h5>Language:</h5>
+                <br>
+                
+                {%for language in languages%}
+                    <input type="checkbox" name="language" value="language">
+                    
+                    
+                    <h5>{{language}}</h5>
+                    <br>
+                {%endfor%}
+                
+                <!--<input type="checkbox" name="English" value="Language">-->
+                <!--<h5>English</h5>-->
+                <!--<br>-->
+                <!--<input type="checkbox" name="Spanish" value="Language">-->
+                <!--<h5>French</h5>-->
+                <br>
+                <input type="submit" value="Apply"/>
             </form>
-        </header>
+        </nav>
         <br>
-        <br>
-        <a href = "{% url 'environment:query' environ_id %}">Query</a>
-        <h1>Results:</h1>
-        <div id="results">
         <article>
+        <h1 id="resultsheading">Results:</h1>
+        <div id="results">
             <div>
                 {% for result in results %}
                     <div id="border">
@@ -40,7 +88,8 @@
                     <br>
                 {% endfor %}
             </div>
-        </article>
+        
         </div>
+        </article>
     </body>
 </html>
