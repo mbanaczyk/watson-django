@@ -60,6 +60,7 @@ def results(request, environment_id):
     
     query_text = request.session["queryText"]
     collections = request.session["collections"]
+    isRefreshAction = False
     
     if query_text == None:
         form = QueryForm(request.POST)
@@ -71,6 +72,7 @@ def results(request, environment_id):
         request.session["collections"] = collections
         form = ResultsForm(request.POST)
     else:
+        isRefreshAction = True
         form = ResultsForm(request.POST)
         if form.is_valid():
             request.session["queryText"] = form.cleaned_data['queryText']
@@ -80,8 +82,24 @@ def results(request, environment_id):
     environ = Environment.objects.get(pk=environment_id)
     results = services.query_environ(query_text,environ.environmentIDString,collections)
 
+    collectionObjs = []
+    for collection in collections:
+        c = Collection.objects.get(collectionIDString=collection)
+        collectionObjs.append(c)
+        
+    languages = []
+    for result in results:
+        json_field_language = result['enriched_text'].get('language')
+        if json_field_language not in languages:
+            languages.append(json_field_language)
             
-    return render(request, 'environment/results.html', {'results':results,'form':form, 'environ_id':environment_id})
+    # if filter action thenn apply the filer condition
+    if(isRefreshAction):
+        results = services.applyFiltersToResults(request, environment_id, 'All', .8)
+    else:
+        results = services.query_environ(query_text,environ.environmentIDString,collections) 
+        
+    return render(request, 'environment/results.html', {'results':results,'form':form, 'environ_id':environment_id, 'collectionObjs' : collectionObjs, 'languages' : languages})
     
 
 def index(request):

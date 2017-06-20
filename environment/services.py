@@ -159,3 +159,29 @@ def get_contacts():
 
     return connections
 
+# method to apply filters on the returned results
+def applyFiltersToResults(request, environment_id, filterCollection, filterRelevance):
+    collection = request.POST['collection']
+    collections = []
+    
+    if(filterCollection == 'All'):
+        collections = request.session["collections"]
+    else:
+        collections = filterCollection
+        
+    query_text = request.session["queryText"]    
+    environ = Environment.objects.get(pk=environment_id)
+    results = services.query_environ(query_text, environ.environmentIDString, collections)
+        
+    # -1 filter relevance means ALL    
+    if(filterRelevance == -1):
+        return results
+    else:    
+        filterResults = []
+        for result in results:
+            if( result.get('score') >= filterRelevance ):
+                filterResults.append(result)           
+    
+    return filterResults
+
+
