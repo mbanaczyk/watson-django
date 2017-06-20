@@ -1,5 +1,18 @@
-<form action="query/results" method="post">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Submit" />
-</form>
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="{% static 'environment/css/main.css' %}" type="text/css"/>
+        <title>Results Page</title>
+        <meta charset="utf-i"/>
+    </head>
+    <body>
+        <img id="LogoAL" src="{% static 'images/AL.png' %}" alt="AirLiquide Logo">
+        <img id="LogoCapco" src="{% static 'images/CAPCO.png' %}" alt="Capco Logo">
+        <br>
+        <form id="QuerySearch" id="queryText" action="query/results" method="post">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Submit" />
+        </form>
+    </body>
