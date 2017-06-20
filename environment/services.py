@@ -30,7 +30,7 @@ def query_environ(query_text,environ_id_string, collect_ids):
     results = []
     unordered_results = []
     for collection in collect_ids:
-        qopts = {'query': query_text, 'return': 'id,score,text,html,extracted_metadata.filename'}
+        qopts = {'query': query_text, 'return': 'id,score,text,html,enriched_text.language,extracted_metadata.filename', 'count':20}
         my_query = discovery.query(environ_id_string, collection, qopts)
         sub_results = my_query.get("results", [])
         
